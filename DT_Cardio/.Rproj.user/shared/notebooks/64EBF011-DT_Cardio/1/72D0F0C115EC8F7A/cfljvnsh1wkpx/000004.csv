@@ -1,0 +1,2 @@
+"0","train <- training(trainTestSplit)"
+"0","View(train)"

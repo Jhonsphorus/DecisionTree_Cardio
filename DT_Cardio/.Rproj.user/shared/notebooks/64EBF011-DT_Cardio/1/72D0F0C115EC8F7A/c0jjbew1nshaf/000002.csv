@@ -1,0 +1,2 @@
+"0","data$NSP = factor(data$NSP)"
+"0","#data$NSP = as.factor(data$NSP)"

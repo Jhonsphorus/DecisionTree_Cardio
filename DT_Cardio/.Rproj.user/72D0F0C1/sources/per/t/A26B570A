@@ -1,0 +1,26 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1580742674287.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3381549106",
+    "id" : "A26B570A",
+    "lastKnownWriteTime" : 1584356407,
+    "last_content_update" : 1584356407651,
+    "path" : "~/RProject/Personal_Projects/DT_Cardio/DT_Cardio.Rmd",
+    "project_path" : "DT_Cardio.Rmd",
+    "properties" : {
+        "cursorPosition" : "7,7",
+        "scrollLine" : "0",
+        "tempName" : "Untitled2"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

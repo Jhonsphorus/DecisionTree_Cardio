@@ -1,0 +1,189 @@
+---
+title: "DT_Cardio"
+author: "Johnson Adebayo_SCV1007 (Cohort 1)"
+date: "2/3/2020"
+output: html_document
+---
+```{r}
+# Main Source: https://data-flair.training/blogs/r-decision-trees/
+# Others: https://data-flair.training/blogs/r-decision-trees/
+```
+
+```{r}
+library(rsample)
+```
+
+```{r}
+library(party)
+```
+
+```{r}
+data <- read.csv("Cardiotocographic.csv")
+View( head(data))
+#View( head(data[1:10,]))
+```
+
+```{r}
+str(data)
+```
+
+
+```{r}
+#summary(data)
+```
+
+# Checking for null values
+```{r}
+any(is.na(data))
+```
+
+# Converting the NSP data from numeric to factor(level)
+# Now, since we have the values of target variable in 3 levels that is 1, 2 and 3. We are using the factor() function which are used to convert the data objects which are used to categorize the data and store it as levels. They can store both strings and integers.
+
+# NSP is the target variable (dependent variable) 
+# NSP - fetal state class code (N=Normal(1), S=Suspect(2), P=Pathologic(3))
+```{r}
+data$NSP = factor(data$NSP)
+#data$NSP = as.factor(data$NSP)
+
+```
+
+
+```{r}
+#str(data)
+```
+
+Splitting dataset into training and validating(testing) sets:
+## After converting the target variables into factors. We will now split our data into training and validation sets and will set the seed of R’s random number generator, which is useful for creating simulations or random objects that can be reproduced.
+```{r}
+set.seed(1200)
+trainTestSplit <- initial_split(data,prop = 0.8)
+trainTestSplit
+```
+
+
+# Alternative method of splitting dataset
+Now the dataset has been split 80% into training data stated by index 1 and 20% into validation data stated by index 2 respectively. 
+```{r}
+#index <- sample(2, nrow(data), replace = T, prob = c(0.8,0.2))
+# train <- data[index ==1]
+# validate <- data[index ==2]
+```
+
+# training dataset
+```{r}
+train <- training(trainTestSplit)
+View(train)
+```
+
+validating (testing) dataset
+```{r}
+validate <- testing(trainTestSplit)
+View(validate)
+```
+
+```{r}
+tree <- ctree(NSP~LB+AC+FM, data = train, controls = ctree_control(mincriterion = 0.99,minsplit = 500))
+```
+
+```{r}
+summary(tree)
+```
+
+```{r}
+plot(tree)
+```
+
+# Prediction: using the validation(test) dataset for prediction
+```{r}
+predicted <- predict(tree, validate)
+predicted
+```
+# Cofusion matrix on the validate(test) dataset
+```{r}
+table1 <- table(predicted,validate$NSP)
+table1
+```
+
+# determining the accuracy
+```{r}
+accuracy = sum(diag(table1))/sum(table1)
+accuracy
+```
+
+# calculating the miscalculating error for validation dataset i.e. for the values outside the diagonal of the confusion matrix above
+```{r}
+error = 1 - accuracy
+error
+```
+
+# Alternatively: Using the train dataset for prediction
+```{r}
+pred1 <- predict(tree, train)
+```
+
+
+```{r}
+tab3 <- table(pred1,train$NSP)
+tab3
+```
+
+# Accuracy using training dataset
+```{r}
+accuracy1 <- sum(diag(tab3))/sum(tab3)
+accuracy1
+```
+
+# miscalculated error using training dataset
+```{r}
+1 - sum(diag(tab3))/sum(tab3)
+```
+
+
+```{r}
+
+```
+
+# Table comparing prediction to actual values of NSP
+```{r}
+Actual = validate$NSP
+tab2 <- data.frame(predicted,Actual)
+View(tab2)
+```
+
+# Decision Tree Using the package 'rpart'
+# It is binary recursive partitioned tree because each of the decision node is splitted into two subgroup.
+# there is also multiway recursive partitioned tree, but binary recursive partitioned tree is favored because of simplicity and accuracy
+# binary recursive split the root node into two daughter nodes while multiway recursive split the root node into multiple daughter nodes. 
+```{r}
+library(rpart) # recursive partitioning and regression tree
+library(rpart.plot)
+```
+
+```{r}
+tree1 <- rpart(NSP~LB+AC+FM, train)
+rpart.plot(tree1)
+
+```
+#  using extra =1 displays the number of observations that fall in the node (per class objects i.e. 1,2, 3 in this case)
+```{r}
+rpart.plot(tree1, extra = 1)
+```
+#  using extra =2 displays the classification rate at teh node expressed(or in term of) number of correct classifications  and the number of observations in the node.
+```{r}
+rpart.plot(tree1, extra = 2)
+```
+
+
+```{r}
+pred2 <- predict(tree1,validate)
+pred2
+```
+
+```{r}
+table(pred2,validate$NSP)
+```
+
+```{r}
+
+```

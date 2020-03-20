@@ -1,0 +1,1 @@
+"0","tree <- ctree(NSP~LB+AC+FM, data = train, controls = ctree_control(mincriterion = 0.99,minsplit = 500))"
